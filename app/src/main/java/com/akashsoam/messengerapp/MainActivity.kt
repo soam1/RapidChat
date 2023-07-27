@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var toolbarMain = findViewById<Toolbar>(R.id.toolbar_main)
 
+
+        var toolbarMain = findViewById<Toolbar>(R.id.toolbar_main)
         setSupportActionBar(binding.toolbarMain)
         supportActionBar!!.title = ""
 
