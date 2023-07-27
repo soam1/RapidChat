@@ -1,16 +1,19 @@
 package com.akashsoam.messengerapp
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.WindowCompat
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.viewpager.widget.ViewPager
 import com.akashsoam.messengerapp.databinding.ActivityMainBinding
+import com.akashsoam.messengerapp.fragments.ChatsFragment
+import com.akashsoam.messengerapp.fragments.SearchFragment
+import com.akashsoam.messengerapp.fragments.SettingsFragment
+import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,18 +26,24 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        var toolbarMain = findViewById<Toolbar>(R.id.toolbar_main)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbarMain)
+        supportActionBar!!.title = ""
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab)
-                .setAction("Action", null).show()
-        }
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        val viewPager = findViewById<ViewPager>(R.id.view_pager)
+        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+
+        viewPagerAdapter.addFragment(ChatsFragment(), "Chats")
+        viewPagerAdapter.addFragment(SearchFragment(), "Search")
+        viewPagerAdapter.addFragment(SettingsFragment(), "Settings")
+
+        viewPager.adapter = viewPagerAdapter
+        tabLayout.setupWithViewPager(viewPager)
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,9 +62,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+
+    internal class ViewPagerAdapter(fragmentManager: FragmentManager) :
+        androidx.fragment.app.FragmentPagerAdapter(fragmentManager) {
+
+        private val fragments: ArrayList<androidx.fragment.app.Fragment>
+        private val titles: ArrayList<String>
+
+
+        init {
+            fragments = ArrayList<androidx.fragment.app.Fragment>()
+            titles = ArrayList<String>()
+        }
+
+        override fun getCount(): Int {
+            return fragments.size
+        }
+
+        override fun getItem(position: Int): androidx.fragment.app.Fragment {
+            return fragments[position]
+        }
+
+        fun addFragment(fragment: androidx.fragment.app.Fragment, title: String) {
+            fragments.add(fragment)
+            titles.add(title)
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return titles[position]
+        }
+
     }
 }

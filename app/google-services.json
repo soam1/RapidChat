@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "65597920752",
+    "project_id": "messengerapp-c8aca",
+    "storage_bucket": "messengerapp-c8aca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65597920752:android:4a21a38c701acbe3597935",
+        "android_client_info": {
+          "package_name": "com.akashsoam.messengerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65597920752-qia6s3nkfa065v9o3vcpijt54d8295n7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp28MA9YWwCvkYclnxaBrcDx_51nknHHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65597920752-qia6s3nkfa065v9o3vcpijt54d8295n7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
