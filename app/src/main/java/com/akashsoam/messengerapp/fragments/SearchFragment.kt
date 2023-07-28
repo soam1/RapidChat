@@ -85,7 +85,6 @@ class SearchFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
             }
 
         })
