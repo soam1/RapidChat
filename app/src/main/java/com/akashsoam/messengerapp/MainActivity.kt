@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.WindowCompat
@@ -14,13 +16,23 @@ import com.akashsoam.messengerapp.databinding.ActivityMainBinding
 import com.akashsoam.messengerapp.fragments.ChatsFragment
 import com.akashsoam.messengerapp.fragments.SearchFragment
 import com.akashsoam.messengerapp.fragments.SettingsFragment
+import com.akashsoam.messengerapp.modelclasses.Users
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    var refUsers: DatabaseReference? = null
+    var firebaseUser: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -35,6 +47,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar!!.title = ""
 
 
+
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        refUsers = FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser!!.uid)
+
+
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
         val viewPager = findViewById<ViewPager>(R.id.view_pager)
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
@@ -46,6 +63,25 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)
 
+
+        //display the username and profile picture on MainActivity
+        refUsers!!.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val user: Users? = dataSnapshot.getValue(Users::class.java)
+                    findViewById<TextView>(R.id.user_name).text = user!!.getUsername()
+                    Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_image)
+                        .into(findViewById<ImageView>(R.id.profile_image))
+                } else {
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
 
     }
 
